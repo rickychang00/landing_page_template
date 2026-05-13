@@ -1,0 +1,18 @@
+# Database
+pb_data/
+
+# Environment Variables (Secrets)
+.env
+.env.local
+.env.development
+.env.production
+
+# Dependencies
+node_modules/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

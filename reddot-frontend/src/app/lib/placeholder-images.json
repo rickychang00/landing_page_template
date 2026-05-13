@@ -1,0 +1,46 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-bg",
+      "description": "Premium abstract banner background",
+      "imageUrl": "https://picsum.photos/seed/tiered-hero/1200/800",
+      "imageHint": "abstract luxury"
+    },
+    {
+      "id": "tier-basic",
+      "description": "Simple geometric icon for basic tier",
+      "imageUrl": "https://picsum.photos/seed/tier1/400/300",
+      "imageHint": "minimalist icon"
+    },
+    {
+      "id": "tier-pro",
+      "description": "Detailed icon for pro tier",
+      "imageUrl": "https://picsum.photos/seed/tier2/400/300",
+      "imageHint": "premium icon"
+    },
+    {
+      "id": "tier-enterprise",
+      "description": "Grand icon for enterprise tier",
+      "imageUrl": "https://picsum.photos/seed/tier3/400/300",
+      "imageHint": "corporate icon"
+    },
+    {
+      "id": "logo-modern",
+      "description": "Modern minimalist company logo",
+      "imageUrl": "https://picsum.photos/seed/logo1/200/200",
+      "imageHint": "modern logo"
+    },
+    {
+      "id": "logo-abstract",
+      "description": "Abstract geometric business logo",
+      "imageUrl": "https://picsum.photos/seed/logo2/200/200",
+      "imageHint": "abstract logo"
+    },
+    {
+      "id": "hero-tech",
+      "description": "Tech focused office hero",
+      "imageUrl": "https://picsum.photos/seed/tech-hero/1200/800",
+      "imageHint": "modern office"
+    }
+  ]
+}

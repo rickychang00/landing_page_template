@@ -1,0 +1,114 @@
+
+{
+  "entities": {
+    "SiteConfig": {
+      "title": "Site Configuration",
+      "description": "Global settings for the landing page including tiers and registration flow.",
+      "type": "object",
+      "properties": {
+        "companyName": { "type": "string" },
+        "companyLogoUrl": { "type": "string" },
+        "heroTitle": { "type": "string" },
+        "heroSubtitle": { "type": "string" },
+        "heroImageUrl": { "type": "string" },
+        "pricingTitle": { "type": "string" },
+        "pricingSubtitle": { "type": "string" },
+        "features": {
+          "type": "array",
+          "items": { "$ref": "#/backend/entities/FeatureSection" }
+        },
+        "tiers": {
+          "type": "array",
+          "items": { "$ref": "#/backend/entities/MembershipTier" }
+        },
+        "registrationFields": {
+          "type": "array",
+          "items": { "$ref": "#/backend/entities/RegistrationField" }
+        }
+      }
+    },
+    "FeatureSection": {
+      "title": "Feature Section",
+      "description": "A content article on the landing page.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "tip": { "type": "string" },
+        "imageRight": { "type": "boolean" }
+      }
+    },
+    "MembershipTier": {
+      "title": "Membership Tier",
+      "description": "A specific pricing plan.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "price": { "type": "string" },
+        "period": { "type": "string", "enum": ["month", "year", "once"] },
+        "description": { "type": "string" },
+        "features": { "type": "array", "items": { "type": "string" } },
+        "isPopular": { "type": "boolean" },
+        "hidden": { "type": "boolean" }
+      }
+    },
+    "RegistrationField": {
+      "title": "Registration Field",
+      "description": "A custom field for the signup form.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "type": { "type": "string", "enum": ["text", "number", "email", "file", "select", "textarea"] },
+        "required": { "type": "boolean" },
+        "placeholder": { "type": "string" },
+        "options": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "MemberProfile": {
+      "title": "Member Profile",
+      "description": "User profile for a registered member.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "name": { "type": "string" },
+        "tierId": { "type": "string" },
+        "hasPaymentConsent": { "type": "boolean" },
+        "registeredAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Transaction": {
+      "title": "Transaction Record",
+      "description": "A log of a payment event (CIT or MIT).",
+      "type": "object",
+      "properties": {
+        "memberId": { "type": "string" },
+        "amount": { "type": "string" },
+        "tierName": { "type": "string" },
+        "type": { "type": "string", "enum": ["CIT", "MIT"] },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "status": { "type": "string" }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["email", "google"]
+  },
+  "firestore": {
+    "/settings/siteConfig": {
+      "schema": "SiteConfig",
+      "description": "Global CMS configuration document."
+    },
+    "/members/{memberId}": {
+      "schema": "MemberProfile",
+      "description": "Profiles of registered hub members."
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Logs of cardholder and merchant initiated transactions."
+    }
+  }
+}
