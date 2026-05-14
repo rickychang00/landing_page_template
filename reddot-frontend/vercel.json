@@ -1,8 +1,9 @@
 {
-    "crons": [
-        {
-            "path": "/api/cron/charge",
-            "schedule": "0 0 * * *"
-        }
-    ]
+  "framework": "nextjs",
+  "crons": [
+    {
+      "path": "/api/cron/charge",
+      "schedule": "0 0 * * *"
+    }
+  ]
 }
