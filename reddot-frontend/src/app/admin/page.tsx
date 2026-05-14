@@ -215,9 +215,27 @@ export default function AdminPage() {
           </h1>
           <p className="text-muted-foreground mt-1 text-lg">Template Management</p>
         </div>
-        <Button size="lg" onClick={handleSave} className="flex gap-2 shadow-xl h-14 px-8 rounded-2xl bg-primary text-primary-foreground font-bold hover:scale-105 transition-transform">
-          <Save className="w-6 h-6" /> Publish Changes
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button size="lg" onClick={handleSave} className="flex gap-2 shadow-xl h-14 px-8 rounded-2xl bg-primary text-primary-foreground font-bold hover:scale-105 transition-transform">
+            <Save className="w-6 h-6" /> Publish Changes
+          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="w-5 h-5 text-muted-foreground cursor-help shrink-0" />
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="max-w-64">
+                <p className="font-semibold mb-1">After publishing:</p>
+                <ul className="text-xs space-y-1">
+                  <li>• Content &amp; settings — live within 30 s</li>
+                  <li>• Page title — updates within 30 s</li>
+                  <li>• Favicon — takes effect on next page load</li>
+                  <li className="text-muted-foreground pl-2">(hard refresh to update existing tabs)</li>
+                </ul>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </div>
 
       <Tabs defaultValue="landing" className="space-y-8">
