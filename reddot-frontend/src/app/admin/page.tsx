@@ -28,6 +28,7 @@ import {
   Layout,
   Upload,
   Info,
+  Globe,
   CalendarDays,
   Building2,
   Settings2,
@@ -304,7 +305,29 @@ export default function AdminPage() {
             </CardContent>
           </Card>
 
-          {/* 2. HERO SECTION */}
+          {/* 2. BROWSER TAB & SEO */}
+          <Card className="border-2 border-primary/10">
+            <CardHeader className="bg-primary/5 border-b flex flex-row items-center gap-3">
+              <Globe className="w-6 h-6 text-primary" />
+              <div>
+                <CardTitle>Browser Tab &amp; SEO</CardTitle>
+                <CardDescription>Controls the page title, description, and favicon shown in browser tabs and search results.</CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent className="p-8 space-y-4">
+              <div className="space-y-2">
+                <Label>Page Title</Label>
+                <Input value={localConfig.pageTitle} onChange={(e) => setLocalConfig({...localConfig, pageTitle: e.target.value})} placeholder="e.g. Tiered Access Hub" />
+              </div>
+              <div className="space-y-2">
+                <Label>Page Description</Label>
+                <Textarea value={localConfig.pageDescription} onChange={(e) => setLocalConfig({...localConfig, pageDescription: e.target.value})} placeholder="Short description shown in search engine results." rows={3} />
+              </div>
+              <ImageUploadField label="Favicon URL (.ico or .png, square)" value={localConfig.faviconUrl} onChange={(val) => setLocalConfig({...localConfig, faviconUrl: val})} />
+            </CardContent>
+          </Card>
+
+          {/* 3. HERO SECTION */}
           <Card className="border-2 border-primary/10">
             <CardHeader className="bg-primary/5 border-b flex flex-row items-center justify-between">
               <div className="flex items-center gap-3">

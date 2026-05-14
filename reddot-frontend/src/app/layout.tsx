@@ -1,13 +1,28 @@
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Toaster } from '@/components/ui/toaster';
 import { Providers } from './providers';
 
-export const metadata: Metadata = {
-  title: 'Tiered Access Hub',
-  description: 'Versatile membership platform for exclusive content.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const res = await fetch(`${process.env.API_URL}/site-config`, {
+      next: { revalidate: 60 },
+    });
+    if (res.ok) {
+      const config = await res.json();
+      return {
+        title: config.pageTitle || 'Tiered Access Hub',
+        description: config.pageDescription || 'Versatile membership platform for exclusive content.',
+        icons: config.faviconUrl ? { icon: config.faviconUrl } : undefined,
+      };
+    }
+  } catch {}
+  return {
+    title: 'Tiered Access Hub',
+    description: 'Versatile membership platform for exclusive content.',
+  };
+}
 
 export default function RootLayout({
   children,

@@ -41,6 +41,9 @@ export interface MembershipTier {
 }
 
 export interface SiteConfig {
+  pageTitle: string;
+  pageDescription: string;
+  faviconUrl: string;
   companyName: string;
   companyLogoUrl: string;
   heroBadge: string;
@@ -86,6 +89,9 @@ export interface TransactionRecord {
 }
 
 export const INITIAL_CONFIG: SiteConfig = {
+  pageTitle: 'Tiered Access Hub',
+  pageDescription: 'Versatile membership platform for exclusive content.',
+  faviconUrl: '',
   companyName: 'Tiered Access Hub',
   companyLogoUrl: '',
   heroBadge: 'PREMIUM MEMBERSHIP HUB',
