@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { Suspense, useMemo, useState, useEffect } from 'react';
 import { apiClient } from '@/lib/api-client';
 import { requestRDPPaymentURL } from '@/app/actions/payment';
+import { updateMember } from '@/app/actions/members';
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format, isSameDay } from "date-fns";
@@ -92,11 +93,8 @@ function RegisterFormContent() {
         orderId: "", // will update
       });
 
-      // 2. Update with orderId (using the record ID)
-      await apiClient(`/members/${record.id}`, {
-        method: 'PUT',
-        body: JSON.stringify({ orderId: record.id }),
-      });
+      // 2. Update with orderId (server action — uses API_SECRET_KEY server-side)
+      await updateMember(record.id!, { orderId: record.id });
 
       // 3. Request RDP URL
       const result = await requestRDPPaymentURL({
