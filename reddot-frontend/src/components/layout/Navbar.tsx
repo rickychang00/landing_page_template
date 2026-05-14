@@ -41,6 +41,19 @@ export function Navbar() {
     return () => clearInterval(poll);
   }, []);
 
+  useEffect(() => {
+    if (config.pageTitle) document.title = config.pageTitle;
+    if (config.faviconUrl) {
+      let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement | null;
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      link.href = config.faviconUrl;
+    }
+  }, [config.pageTitle, config.faviconUrl]);
+
   const handleSignOut = () => {
     clearToken();
     window.location.href = '/';
