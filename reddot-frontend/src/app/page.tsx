@@ -3,7 +3,8 @@
 import { Hero } from '@/components/landing/Hero';
 import { TierSection } from '@/components/landing/TierSection';
 import { apiClient } from '@/lib/api-client';
-import { INITIAL_CONFIG, SiteConfig, linkTransactionToMember, recordTransaction } from '@/lib/cms-store';
+import { INITIAL_CONFIG, SiteConfig } from '@/lib/cms-store';
+import { getMemberByOrderId, updateMember } from '@/app/actions/members';
 import { resolveAssetUrl } from '@/lib/asset-url';
 import { useEffect, Suspense, useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -56,25 +57,21 @@ function HomePageContent() {
               const orderId = data.order_id;
               if (orderId) {
                 try {
-                   const memberRecord = await apiClient<any>(`/members?orderId=${encodeURIComponent(orderId)}`);
-                   const finalPayerId = data.payer_id || urlPayerId;
-
-                   await linkTransactionToMember(memberRecord.id, transactionId, finalPayerId);
-                   
-                   const actualAmount = data.amount || data.authorized_amount;
-                   await recordTransaction({
-                     memberId: memberRecord.id,
-                     memberName: data.payer_name || 'Verified Member',
-                     amount: String(actualAmount || '0'),
-                     tierName: 'Activated Tier',
-                     type: 'CIT'
-                   }, transactionId);
-
-                   toast({ title: "Success!", description: "Membership activated." });
-                } catch (e) {
-                  console.error("Member not found for orderId:", orderId);
-                }
+                  const memberRecord = await getMemberByOrderId(orderId);
+                  const finalPayerId = data.payer_id || urlPayerId;
+                  // Update member with payment details — webhook may have done this
+                  // already, but this is idempotent so safe to run again.
+                  // recordTransaction is intentionally skipped here: the S2S webhook
+                  // reliably records it; calling it again would create a duplicate.
+                  await updateMember(memberRecord.id, {
+                    lastTransactionId: transactionId,
+                    paymentStatus: 'active',
+                    ...(finalPayerId ? { payerId: finalPayerId } : {}),
+                    rdpResponse: data,
+                  });
+                } catch {}
               }
+              toast({ title: "Payment Successful!", description: "Your membership is now active." });
             }
           }
         } catch (err) {

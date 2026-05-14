@@ -8,3 +8,7 @@ export async function updateMember(id: string, data: Record<string, unknown>) {
     body: JSON.stringify(data),
   });
 }
+
+export async function getMemberByOrderId(orderId: string) {
+  return serverApiClient<any>(`/members?orderId=${encodeURIComponent(orderId)}`);
+}
