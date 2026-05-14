@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Shield, Settings, User, LogOut, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { apiClient, isAuthenticated, clearToken, getToken } from '@/lib/api-client';
@@ -9,14 +10,15 @@ import { SiteConfig, INITIAL_CONFIG } from '@/lib/cms-store';
 import { resolveAssetUrl } from '@/lib/asset-url';
 
 export function Navbar() {
+  const pathname = usePathname();
   const [isAuthed, setIsAuthed] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [config, setConfig] = useState<SiteConfig>(INITIAL_CONFIG);
 
+  // Re-check auth on every navigation so login/logout reflects immediately.
   useEffect(() => {
     const authed = isAuthenticated();
     setIsAuthed(authed);
-
     if (authed) {
       try {
         const token = getToken();
@@ -25,8 +27,13 @@ export function Navbar() {
           setUserEmail(payload.email ?? null);
         }
       } catch {}
+    } else {
+      setUserEmail(null);
     }
+  }, [pathname]);
 
+  // Config polling — set up once, independent of navigation.
+  useEffect(() => {
     const fetchConfig = async () => {
       try {
         const data = await apiClient<SiteConfig>('/site-config');
