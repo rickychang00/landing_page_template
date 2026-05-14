@@ -27,6 +27,7 @@ import {
   Loader2,
   Layout,
   Upload,
+  Info,
   CalendarDays,
   Building2,
   Settings2,
@@ -46,6 +47,7 @@ import {
 } from '@/lib/cms-store';
 import { resolveAssetUrl } from '@/lib/asset-url';
 import { useToast } from '@/hooks/use-toast';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { requestRDPMITPayment } from '@/app/actions/payment';
 import Image from 'next/image';
 
@@ -54,7 +56,7 @@ function ImageUploadField({ value, onChange, label }: { value: string, onChange:
   const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
 
-  const MAX_UPLOAD_BYTES = 10 * 1024 * 1024; // 10 MB — must match assets collection maxSize
+  const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4 MB — Vercel serverless body limit
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -64,7 +66,7 @@ function ImageUploadField({ value, onChange, label }: { value: string, onChange:
       toast({
         variant: "destructive",
         title: "File Too Large",
-        description: `Maximum size is 10 MB. Your file is ${(file.size / 1024 / 1024).toFixed(1)} MB.`,
+        description: `Maximum size is 4 MB. Your file is ${(file.size / 1024 / 1024).toFixed(1)} MB.`,
       });
       e.target.value = '';
       return;
@@ -89,12 +91,22 @@ function ImageUploadField({ value, onChange, label }: { value: string, onChange:
   return (
     <div className="space-y-2">
       <Label>{label}</Label>
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center">
         <Input value={value} onChange={(e) => onChange(e.target.value)} placeholder="https://..." className="flex-1" />
         <div className="relative">
           <Input type="file" className="absolute inset-0 opacity-0 cursor-pointer w-10 h-10" onChange={handleUpload} disabled={isUploading} accept="image/*" />
           <Button variant="outline" size="icon" className="w-10 h-10" disabled={isUploading}>{isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}</Button>
         </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info className="w-4 h-4 text-muted-foreground cursor-help shrink-0" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Max image size: 4 MB</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   );
