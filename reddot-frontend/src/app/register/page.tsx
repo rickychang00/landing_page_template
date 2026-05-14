@@ -83,24 +83,25 @@ function RegisterFormContent() {
       const amount = parseInt(tier.price.replace(/[^0-9]/g, ''));
       const recurringMod = tier.period === 'once' ? undefined : "2";
 
-      // 1. Create member in PB
+      // 1. Create member
       const record = await saveMember({
         name: values.full_name,
         email: values.email,
         tierId: tier.id,
         hasPaymentConsent: true,
         selectedDate: dateStr,
-        orderId: "", // will update
+        orderId: "",
       });
 
-      // 2. Update with orderId (server action — uses API_SECRET_KEY server-side)
-      await updateMember(record.id!, { orderId: record.id });
+      // 2. Derive a short order ID (RDP max 20 chars) from the member UUID
+      const orderId = record.id!.replace(/-/g, '').slice(0, 20);
+      await updateMember(record.id!, { orderId });
 
       // 3. Request RDP URL
       const result = await requestRDPPaymentURL({
         payerName: values.full_name,
         payerEmail: values.email,
-        orderId: record.id,
+        orderId,
         amount: amount,
         recurringMod: recurringMod
       });
