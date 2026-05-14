@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { db } from '../db';
 import { members } from '../db/schema';
-import { requireAuth, requireApiSecret } from '../middleware/auth';
+import { requireAuth } from '../middleware/auth';
 import { eq, lte, and } from 'drizzle-orm';
 
 const router = Router();
@@ -38,8 +38,7 @@ router.get('/', requireAuth, async (req: Request, res: Response) => {
   if (dueForCharge === 'true') {
     const now = new Date();
     const due = await db.query.members.findMany({
-      where: (m, { and, lte, eq }) =>
-        and(lte(m.nextChargeAt, now), eq(m.paymentStatus, 'active')),
+      where: and(lte(members.nextChargeAt, now), eq(members.paymentStatus, 'active')),
     });
     res.json(due);
     return;
@@ -54,7 +53,7 @@ router.get('/', requireAuth, async (req: Request, res: Response) => {
 // GET /members/:id — requires auth or API secret
 router.get('/:id', requireAuth, async (req: Request, res: Response) => {
   const member = await db.query.members.findFirst({
-    where: (m, { eq }) => eq(m.id, req.params.id),
+    where: (m, { eq }) => eq(m.id, String(req.params.id)),
   });
   if (!member) {
     res.status(404).json({ error: 'Member not found' });
@@ -109,7 +108,7 @@ router.put('/:id', async (req: Request, res: Response) => {
   const [updated] = await db
     .update(members)
     .set(updateData)
-    .where(eq(members.id, req.params.id))
+    .where(eq(members.id, String(req.params.id)))
     .returning();
 
   if (!updated) {

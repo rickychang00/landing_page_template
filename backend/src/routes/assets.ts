@@ -4,7 +4,7 @@ import { uploadAsset } from '../lib/blob';
 import { requireAuth } from '../middleware/auth';
 
 const router = Router();
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 4 * 1024 * 1024 } });
 
 // POST /assets — admin only
 router.post('/', requireAuth, upload.single('file'), async (req: Request, res: Response) => {
