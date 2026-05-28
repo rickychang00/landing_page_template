@@ -18,7 +18,7 @@ function HomePageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const transactionId = searchParams.get('transaction_id');
-  
+
   const [isVerifying, setIsVerifying] = useState(false);
   const [config, setConfig] = useState<SiteConfig>(INITIAL_CONFIG);
   const [loading, setLoading] = useState(true);
@@ -69,7 +69,7 @@ function HomePageContent() {
                     ...(finalPayerId ? { payerId: finalPayerId } : {}),
                     rdpResponse: data,
                   });
-                } catch {}
+                } catch { }
               }
               toast({ title: "Payment Successful!", description: "Your membership is now active." });
             }
@@ -102,19 +102,19 @@ function HomePageContent() {
         </div>
       )}
 
-      <Hero 
-        title={config.heroTitle} 
-        subtitle={config.heroSubtitle} 
-        imageUrl={resolveAssetUrl(config.heroImageUrl)} 
+      <Hero
+        title={config.heroTitle}
+        subtitle={config.heroSubtitle}
+        imageUrl={resolveAssetUrl(config.heroImageUrl)}
         buttons={config.heroButtons}
         badge={config.heroBadge}
       />
-      
+
       <div id="tiers">
-        <TierSection 
-          tiers={config.tiers?.filter(t => !t.hidden)} 
-          title={config.pricingTitle} 
-          subtitle={config.pricingSubtitle} 
+        <TierSection
+          tiers={config.tiers?.filter(t => !t.hidden)}
+          title={config.pricingTitle}
+          subtitle={config.pricingSubtitle}
         />
       </div>
 
@@ -126,9 +126,9 @@ function HomePageContent() {
                 <h2 className="text-4xl font-headline font-bold text-primary">{feature.title}</h2>
                 <p className="text-lg text-muted-foreground leading-relaxed">{feature.description}</p>
                 {feature.tip && (
-                   <div className="flex gap-4 p-4 rounded-xl bg-secondary/30 border border-primary/10 italic">
-                     "{feature.tip}"
-                   </div>
+                  <div className="flex gap-4 p-4 rounded-xl bg-secondary/30 border border-primary/10 italic">
+                    "{feature.tip}"
+                  </div>
                 )}
               </div>
               <div className={cn("relative aspect-video rounded-3xl overflow-hidden shadow-2xl", !feature.imageRight ? "md:order-1" : "md:order-2")}>
@@ -141,7 +141,7 @@ function HomePageContent() {
 
       <footer className="py-12 bg-secondary/20">
         <div className="container px-4 mx-auto text-center">
-          <p className="text-muted-foreground">© 2024 {config.companyName}. All rights reserved.</p>
+          <p className="text-muted-foreground">{config.footerText || `© 2024 ${config.companyName}. All rights reserved.`}</p>
         </div>
       </footer>
     </main>

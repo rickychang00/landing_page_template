@@ -57,6 +57,7 @@ export interface SiteConfig {
   tiers: MembershipTier[];
   navLinks: NavLink[];
   registrationFields: RegistrationField[];
+  footerText: string;
 }
 
 export interface MemberProfile {
@@ -156,6 +157,7 @@ export const INITIAL_CONFIG: SiteConfig = {
     { id: 'email', label: 'Email Address', type: 'email', required: true, placeholder: 'john@example.com' },
     { id: 'business_reg', label: 'NRIC', type: 'text', required: false, placeholder: 'Optional for tax purposes' },
   ],
+  footerText: '© 2024 Tiered Access Hub. All rights reserved.',
 };
 
 export async function updateSiteConfig(newConfig: SiteConfig) {
@@ -198,7 +200,7 @@ export async function linkTransactionToMember(
         if (tier.period === 'year') nextDate.setFullYear(nextDate.getFullYear() + 1);
         updateData.nextChargeAt = nextDate.toISOString();
       }
-    } catch {}
+    } catch { }
 
     await apiClient(`/members/${memberId}`, {
       method: 'PUT',
