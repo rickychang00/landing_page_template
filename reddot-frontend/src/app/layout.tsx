@@ -8,6 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   try {
     const res = await fetch(`${process.env.API_URL}/site-config`, {
       next: { revalidate: 60 },
+      signal: AbortSignal.timeout(5000),
     });
     if (res.ok) {
       const config = await res.json();
@@ -17,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
         icons: config.faviconUrl ? { icon: config.faviconUrl } : undefined,
       };
     }
-  } catch {}
+  } catch { }
   return {
     title: 'Tiered Access Hub',
     description: 'Versatile membership platform for exclusive content.',
